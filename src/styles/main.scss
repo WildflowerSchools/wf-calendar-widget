@@ -1,0 +1,30 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
+$wf-teal:      #00a69c !default;
+$wf-dark-teal: #137070 !default;
+
+.hide {
+    display: none !important;
+}
+
+.color-wf-teal {
+    color: $wf-teal;
+}
+
+.wf-events {
+    .card.wf-event {
+        border-radius: 0;
+
+        &:not(:first-child) {
+            border-top: none;
+        }
+        &:not(:last-child) {
+            border-bottom: 1px dashed gray("500");
+        }
+
+        .card-text {
+            color: gray("800");
+        }
+    }
+}

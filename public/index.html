@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wildflower Schools: GCalendar JS Plugin</title>
+    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div id="overlord">
+        <div id="root"></div>
+        <script async src=".<%= htmlWebpackPlugin.files.chunks['app'].entry %>" onload="wfCal.render()"></script>
+    </div>
+</body>
+</html>
