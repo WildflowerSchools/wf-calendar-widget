@@ -9,7 +9,7 @@ import { Card } from "react-bootstrap"
 import EllipsisString from "./EllipsisString"
 
 function Calendar(props) {
-  const { calendarId, apiKey, dayRange = 10 } = props
+  const { calendarId, apiKey, dayRange = 10, showDescription = false } = props
 
   const timeMin = moment()
     .tz("America/New_York")
@@ -28,7 +28,7 @@ function Calendar(props) {
     CAL_QUERY_PARAMS
   )}`
 
-  const FRONTEND_START_TIME_FORMAT = "MMM Do, YYYY h:mm"
+  const FRONTEND_START_TIME_FORMAT = "dddd, MMM Do, YYYY h:mm"
   const FRONTEND_END_TIME_FORMAT = "h:mm a z"
 
   const [events, setEvents] = useState([])
@@ -87,7 +87,7 @@ function Calendar(props) {
                   </small>
                 </Card.Subtitle>
               )}
-              {event.description && (
+              {showDescription && event.description && (
                 <Card.Text className="mb-3">
                   <EllipsisString text={event.description} />
                 </Card.Text>
