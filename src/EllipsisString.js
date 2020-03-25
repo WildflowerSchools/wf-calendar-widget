@@ -15,7 +15,7 @@ function EllipsisString(props) {
     )
   }
 
-  return <span>{truncatedText()}</span>
+  return truncatedText()
 }
 
 export default EllipsisString
