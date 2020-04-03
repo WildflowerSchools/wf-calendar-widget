@@ -3,7 +3,7 @@ import useAxios from "axios-hooks"
 import moment from "moment"
 import "moment-timezone"
 import queryString from "query-string"
-import { FaMapMarkerAlt, FaClock } from "react-icons/fa"
+import { FaMapMarkerAlt, FaClock, FaVideo, FaPhone } from "react-icons/fa"
 import stripHtml from "string-strip-html"
 import { Card } from "react-bootstrap"
 import EllipsisString from "./EllipsisString"
@@ -34,6 +34,18 @@ function Calendar(props) {
   const [events, setEvents] = useState([])
   const [{ data, loading, error }] = useAxios(CAL_URL)
 
+  const isValidHttpUrl = val => {
+    let url
+
+    try {
+      url = new URL(val)
+    } catch (_) {
+      return false
+    }
+
+    return url.protocol === "http:" || url.protocol === "https:"
+  }
+
   useEffect(() => {
     if (!loading && !error && data) {
       const _events = data.items.map(event => {
@@ -56,10 +68,37 @@ function Calendar(props) {
           description: stripHtml(event?.description || "", {
             ignoreTags: "<a>"
           }),
-          location: event?.location || ""
+          location: event?.location || "",
+          video:
+            event?.conferenceData?.entryPoints
+              ?.filter(e => {
+                return e.entryPointType === "video"
+              })
+              .map(e => {
+                return {
+                  uri: e.uri,
+                  label: e.label,
+                  meetingCode: e.meetingCode,
+                  password: e.password
+                }
+              }) || [],
+          phone:
+            event?.conferenceData?.entryPoints
+              ?.filter(e => {
+                return e.entryPointType === "phone"
+              })
+              .map(e => {
+                return {
+                  uri: e.uri,
+                  label: e.label,
+                  meetingCode: e.meetingCode,
+                  password: e.password
+                }
+              }) || []
         }
       })
 
+      console.log(_events)
       setEvents(_events)
     }
   }, [data, loading, error])
@@ -81,12 +120,47 @@ function Calendar(props) {
                 <Card.Subtitle className="mb-3 text-muted">
                   <small>
                     <FaMapMarkerAlt className="pr-1" />
-                    <a href={event.location} target="blank">
-                      {event.location}
-                    </a>
+                    {isValidHttpUrl(event.location) ? (
+                      <a href={event.location} target="_blank">
+                        {event.location}
+                      </a>
+                    ) : (
+                      <span>{event.location}</span>
+                    )}
                   </small>
                 </Card.Subtitle>
               )}
+              {!isValidHttpUrl(event.location) &&
+                event.video.map((video, key) => (
+                  <Card.Subtitle className="mb-3 text-muted" key={key}>
+                    <small>
+                      <FaVideo className="pr-1" />
+                      <a href={video.uri} target="_blank">
+                        {video.uri}
+                      </a>
+                      {video.meetingCode && (
+                        <div className={"mr-1"}>
+                          Meeting Code: {video.meetingCode}
+                        </div>
+                      )}
+                      {video.password && <div>Password: {video.password}</div>}
+                    </small>
+                  </Card.Subtitle>
+                ))}
+              {event.phone.map((phone, key) => (
+                <Card.Subtitle className="mb-3 text-muted" key={key}>
+                  <small>
+                    <FaPhone className="pr-1" />
+                    <a href={phone.uri} target="_blank">
+                      {phone.label}
+                    </a>
+                    {phone.meetingCode && (
+                      <div>Meeting Code: {phone.meetingCode}</div>
+                    )}
+                    {phone.password && <div>Password: {phone.password}</div>}
+                  </small>
+                </Card.Subtitle>
+              ))}
               {showDescription && event.description && (
                 <Card.Text className="mb-3">
                   <EllipsisString text={event.description} />
