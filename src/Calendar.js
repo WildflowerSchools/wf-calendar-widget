@@ -4,7 +4,7 @@ import moment from "moment"
 import "moment-timezone"
 import queryString from "query-string"
 import { FaMapMarkerAlt, FaClock, FaVideo, FaPhone } from "react-icons/fa"
-import stripHtml from "string-strip-html"
+import { stripHtml } from "string-strip-html"
 import { Card } from "react-bootstrap"
 import EllipsisString from "./EllipsisString"
 
@@ -119,7 +119,7 @@ function Calendar(props) {
               {event.location && (
                 <Card.Subtitle className="mb-3 text-muted">
                   <small>
-                    <FaMapMarkerAlt className="pr-1" />
+                    <FaMapMarkerAlt className="pe-1" />
                     {isValidHttpUrl(event.location) ? (
                       <a href={event.location} target="_blank">
                         {event.location}
@@ -134,12 +134,12 @@ function Calendar(props) {
                 event.video.map((video, key) => (
                   <Card.Subtitle className="mb-3 text-muted" key={key}>
                     <small>
-                      <FaVideo className="pr-1" />
+                      <FaVideo className="pe-1" />
                       <a href={video.uri} target="_blank">
                         {video.uri}
                       </a>
                       {video.meetingCode && (
-                        <div className={"mr-1"}>
+                        <div className={"me-1"}>
                           Meeting Code: {video.meetingCode}
                         </div>
                       )}
@@ -150,7 +150,7 @@ function Calendar(props) {
               {event.phone.map((phone, key) => (
                 <Card.Subtitle className="mb-3 text-muted" key={key}>
                   <small>
-                    <FaPhone className="pr-1" />
+                    <FaPhone className="pe-1" />
                     <a href={phone.uri} target="_blank">
                       {phone.label}
                     </a>
@@ -168,7 +168,7 @@ function Calendar(props) {
               )}
               <Card.Subtitle className="text-muted">
                 <small>
-                  <FaClock className="pr-1" />
+                  <FaClock className="pe-1" />
                   {event.start}-{event.end}
                 </small>
               </Card.Subtitle>

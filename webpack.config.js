@@ -1,7 +1,6 @@
 const path = require('path');
 const package = require('./package.json');
 const TerserPlugin = require('terser-webpack-plugin');
-const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs')
 
@@ -28,19 +27,20 @@ module.exports = (env, options) => {
     output: {
       path: path.resolve(__dirname, 'build'),
       publicPath: '/',
-      filename: () => build ? `wf-calendar-widget.${version}.[contenthash].js` : 'bundle.js',
+      filename: () => build ? `wf-calendar-widget.${version}.[contenthash].js` : '[name].bundle.js',
       library: 'wfCal',
       libraryTarget: 'var'
     },
     devServer: {
       host: 'localhost',
-      port: 3000,
+      port: 3001,
+      public: 'localhost:3001',
       open: true,
       https: https,
       historyApiFallback: {
         index: `/index.${version}.html`
       },
-      contentBase: path.resolve(__dirname, 'public', `index.html`)
+      static: path.resolve(__dirname, 'public', `index.html`)
     },
     devtool: build ? false : 'cheap-module-source-map',
     module: {
@@ -76,14 +76,17 @@ module.exports = (env, options) => {
       ]
     },
     plugins: [
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
       new webpack.DefinePlugin({
         'process.env.CALENDAR_ID': JSON.stringify(process.env.CALENDAR_ID),
         'process.env.GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY)
       }),
-      new ErrorOverlayPlugin(),
       new HtmlWebpackPlugin({
         template: path.join(__dirname, 'public', 'index.html'),
         inject: false,
+        favicon: path.join(__dirname, 'public', 'favicon.ico'),
         filename: path.join(__dirname, 'build', `index.${version}.html`),
       })
     ],
@@ -97,6 +100,11 @@ module.exports = (env, options) => {
           }
         })
       ]
+    },
+    resolve: {
+      fallback: {
+        util: require.resolve("util/")
+      }
     }
   };
 };

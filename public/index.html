@@ -9,7 +9,9 @@
 <body>
     <div id="overlord">
         <div id="root"></div>
-        <script async src=".<%= htmlWebpackPlugin.files.chunks['app'].entry %>" onload="wfCal.render()"></script>
+        <% for (index in htmlWebpackPlugin.files.js) { %>
+            <script async src=".<%= htmlWebpackPlugin.files.js[index] %>" onload="wfCal.render()"></script>
+        <% } %>
     </div>
 </body>
 </html>
