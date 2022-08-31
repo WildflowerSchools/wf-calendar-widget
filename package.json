@@ -9,7 +9,7 @@
     "axios-hooks": "^2.6.1",
     "bootstrap": "^5.0.0",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.28",
+    "moment-timezone": "^0.5.35",
     "process": "^0.11.10",
     "query-string": "^7.0.0",
     "react": "^17.0.2",
